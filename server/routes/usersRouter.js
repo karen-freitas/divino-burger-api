@@ -4,8 +4,8 @@ const { all, create } = require('../controller/users');
 const router = Router();
 
 // aqui vai as requisições
-router.get('/users', all);
-router.post('/users', create);
+router.get('/', all);
+router.post('/', create);
 
 
 module.exports = router;

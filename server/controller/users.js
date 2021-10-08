@@ -18,7 +18,7 @@
 
 // module.exports = { getExample, getOtherExample, Cars };
 
-const users = require("../database/models/users");
+const users = require("../db/models/users");
 
 module.exports = {
   all(req, res, next) {
