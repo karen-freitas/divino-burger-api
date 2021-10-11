@@ -6,57 +6,89 @@ const { users } = database;
 
 
 module.exports={
-  getExample(req, res){
-    console.log('você também pode utilizar o console para visualizar =)');
-    res.send('Request getExample feita');
-  },
-  
-  getOtherExample (req, res) {
-    console.log('outro console =)');
-    res.send('Request getOtherExample feita');
-  },
-  
-  addUser(req,res){
-    const { name, email, password, role, restaurant } = req.body;
 
-    return users
-    .create({
-      name, 
-      email, 
-      password, 
-      role, 
-      restaurant
-    })
-    .then((user) => res.status(201).send(user))
-    .catch((error) => res.status(400).send(error));
-  },
-
-  get(req, res, next){
-    res.status(200).send({
-      message:'Retorna todos os users'
-    })
-  },
-
-  add(req,res,next){
-    const { name, email, password, role, restaurant } = req.body;
-    const user = {name, 
-          email, 
-          password, 
-          role, 
-          restaurant
+  async getUsers (req, res) {
+    try{
+      const allUsers = await users.findAll({
+        attributes:["id", "name", "email", "role"]
+      })
+      return res.status(200).json(allUsers);
     }
-    res.status(201).send({
-      message:"Insere um usuário",
-      userCreated:user
-    })
+    catch (error) {
+      return res.status(400).json({
+        code: 400,
+        error: error.message,
+      });
     }
-  }
-
-  const addUser= async(req, res) => {
-      const user = await users.create(req.body)
-      res.json({message:'Product Added!', ProductAdded: newProduct})
     
+},
+  
+  async addUser(req,res){
+    const { name, email, password, role, restaurant } = req.body;
+
+    try{
+
+    const [user, created] = await users.findOrCreate({
+      where: { email:email },
+      defaults: {name, password, role, restaurant}
+    });
+    if(created){
+      return res.status(200).json(user);
+
+    } else {
+      return res.status(400).json({
+        code: 400,
+        error: "E-mail já cadastrado.",
+      });
+    }
+
+  }catch (error) {
+      return res.status(400).json({
+        code: 400,
+        error: error.message,
+      });
   }
+},
+
+  async updateUser(req,res){
+
+    const { name, password, role } = req.body;
+    const findUser = await users.findByPk(req.params.userId);
+
+    if (!findUser) {
+      return res.status(400).json({
+        code: 400,
+        message: 'User not found.',
+      });
+    }
+
+    try {
+      await users.update(
+        { name, password, role },
+        { where: { id: req.params.userId } },
+      );
+
+      const updatedUser = await users.findOne({
+        where: { id: req.params.userId },
+        attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+      });
+
+      return res.status(200).json(updatedUser);
+    } catch (error) {
+      return res.status(400).json({
+        code: 400,
+        error: error.message,
+      });
+    }
+  }
+
+  }
+
+
+
+
+
+ 
 
 
 
