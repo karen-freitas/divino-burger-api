@@ -1,23 +1,56 @@
 
-require('dotenv').config();
+require('dotenv/config')
+console.log(process.env.DATABASE_USER)
+
 module.exports = {
   // "development": {
-  //   "use_env_variable": "DATABASE_URL",
+  //   "use_env_variable": process.env.DATABASE_URL,
   //   "dialect": "postgres",
   //   "dialectOptions": {
   //     "ssl": {
   //      " require": true,
   //       "rejectUnauthorized": false
+  //     }
+  //   }
   // },
-  "development": {
-    "username": "postgres",
-    "password": "luigipixel17",
-    "database": "divino-burger-api",
-    "host": "127.0.0.1",
-    "dialect": "postgres",
-    "port": 5432,
+  // "development": {
+  //   "username": "postgres",
+  //   "password": "luigipixel17",
+  //   "database": "divino-burger-api",
+  //   "host": "127.0.0.1",
+  //   "dialect": "postgres",
+  //   "port": 5432,
     
+  // },
+
+  //  "development": {
+  //   "username": process.env.DATABASE_USER,
+  //   "password": process.env.DATABASE_PASSWORD,
+  //   "database": process.env.DATABASE_DATABASE,
+  //   "host": process.env.HOST,
+  //   "dialect": "postgres",
+  //   "dialectOptions": {
+  //     "ssl": {
+  //       "require": true,
+  //       "rejectUnauthorized": false
+  //     }
+  //   }
+  // },
+
+  "development": {
+    "username": "qyparswnfqliom",
+    "password": "316d28fb16cbabff8da69496b2b1e38cc76828a7d5a53b45939c198628b5f27b",
+    "database": "daern93cekmj3r",
+    "host": "ec2-44-199-86-61.compute-1.amazonaws.com",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   },
+
   "test": {
     "username": "root",
     "password": null,
@@ -26,7 +59,7 @@ module.exports = {
     "dialect": "postgres"
   },
   "production": {
-    "use_env_variable": "DATABASE_URL",
+    "use_env_variable": process.env.DATABASE_URL,
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
