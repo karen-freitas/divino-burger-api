@@ -5,6 +5,6 @@ const router = Router();
 
 // aqui vai as requisições
 router.get('/', getExample);
-router.get('/other', getOtherExample);
+router.post('/', getOtherExample);
 
 module.exports = router;

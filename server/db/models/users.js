@@ -1,6 +1,5 @@
 'use strict';
 const {Model} = require('sequelize');
-
 module.exports = (sequelize, DataTypes) => {
   class users extends Model {
     /**
@@ -25,23 +24,18 @@ module.exports = (sequelize, DataTypes) => {
   return users;
 };
 
-// const { DataTypes } = require("sequelize");
+// module.exports = (sequelize, Sequelize) => {
+//   const users = sequelize.define( "users", {
+//     name: {
+//       type: Sequelize.STRING
+//     },
+//     email: {
+//       type: Sequelize.STRING
+//     },
+//     password: {
+//       type: Sequelize.STRING
+//     }
+//   });
 
-// const sequelize = require("../sequelize");
-
-// const users = sequelize.define("users", {
-//       name: DataTypes.STRING,
-//       email: DataTypes.STRING,
-//       password: DataTypes.STRING,
-//       role: DataTypes.STRING,
-//       restaurant: DataTypes.STRING
-//     });
-
-// //create table if not exists...
-// const init = async () => {
-//   await users.sync();
+//   return users;
 // };
-
-// init();
-
-// module.exports = users;
