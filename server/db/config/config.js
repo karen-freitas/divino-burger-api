@@ -1,31 +1,7 @@
 
 require('dotenv').config()
-// require('dotenv').config({path:'../../../server/.env'});
-console.log(process.env.DATABASE_USER)
-console.log(process.env.DATABASE_HOST)
-
-
 
 module.exports = {
-  // "development": {
-  //   "use_env_variable": process.env.DATABASE_URL,
-  //   "dialect": "postgres",
-  //   "dialectOptions": {
-  //     "ssl": {
-  //       " require": true,
-  //       "rejectUnauthorized": false
-  //     }
-  //   }
-  // },
-  // "development": {
-  //   "username": "postgres",
-  //   "password": "luigipixel17",
-  //   "database": "divino-burger-api",
-  //   "host": "127.0.0.1",
-  //   "dialect": "postgres",
-  //   "port": 5432,
-    
-  // },
 
    "development": {
     "username": process.env.DATABASE_USER,
