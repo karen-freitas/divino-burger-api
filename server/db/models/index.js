@@ -1,4 +1,5 @@
-require('dotenv').config()
+// require('dotenv').config()
+if (app.get('env') == 'development'){ require('dotenv').config(); }
 'use strict';
 
 const fs = require('fs');
