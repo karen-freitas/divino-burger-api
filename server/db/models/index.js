@@ -1,5 +1,5 @@
 // require('dotenv').config()
-if (app.get('env') == 'development'){ require('dotenv').config(); }
+if (process.env.NODE_ENV !== 'production'){ require('dotenv').config(); }
 'use strict';
 
 const fs = require('fs');
