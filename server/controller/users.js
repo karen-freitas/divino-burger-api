@@ -2,9 +2,6 @@
 const database= require("../db/models");
 const { users } = database;
 
-// const users = require("../db/models/users");
-
-
 module.exports={
 
   async getUsers (req, res) {
