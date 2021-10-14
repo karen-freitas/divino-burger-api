@@ -14,13 +14,52 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   products.init({
-    name: DataTypes.STRING,
-    flavor: DataTypes.STRING,
-    complement: DataTypes.STRING,
-    price: DataTypes.FLOAT,
+    name:{
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate: {
+        notNull: {msg: "The name field is required"},
+        notEmpty: {msg: "The name field is required"},
+    }},
+
+    flavor:{
+      type:DataTypes.STRING,
+      allowNull:true,
+      defaultValue: null,
+    },
+
+    complement:{
+      type:DataTypes.STRING,
+      allowNull:true,
+      defaultValue: null,
+    },
+
+    price:{
+      type:DataTypes.FLOAT,
+      allowNull:false,
+      validate: {
+        notNull: {msg: "The subtype field is required"},
+        notEmpty: {msg: "The subtype field is required"},
+    }},
+
     image: DataTypes.STRING,
-    type: DataTypes.STRING,
-    subtype: DataTypes.STRING
+
+    type:{
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate: {
+        notNull: {msg: "The type field is required"},
+        notEmpty: {msg: "The type field is required"},
+    }},
+
+    subtype:{
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate: {
+        notNull: {msg: "The subtype field is required"},
+        notEmpty: {msg: "The subtype field is required"},
+    }},
+
   }, {
     sequelize,
     modelName: 'products',

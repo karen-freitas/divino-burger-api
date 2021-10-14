@@ -7,7 +7,7 @@ module.exports = {
   async getUsers(req, res) {
     try {
       const allUsers = await users.findAll({
-        attributes: ["id", "name", "email", "role", "restaurant"],
+        attributes:['id', 'name', 'email', 'role', 'restaurant'],
         order: [['id', 'ASC']]
       })
       return res.status(200).json(allUsers);
@@ -141,55 +141,3 @@ module.exports = {
 
   }
 }
-
-
-
-
-
-
-
-
-
-// const Users = {
-//   all(req, res) {
-//     return res.json(['Karen', 'João', 'Maria', 'José']);
-//   },
-// };
-
-
-// class UsersController {
-// static async create(req, res) {
-//   const { email, name, password, role, restaurant } = req.body;
-
-
-
-
-// module.exports = { getExample, getOtherExample, Users, UsersController };
-
-// const users = require("../db/models/users");
-
-// module.exports = {
-//   all(req, res, next) {
-//     users.findAll()
-//       .then((result) => {
-//         res.json(result);
-//       })
-//       .catch(next);
-//   },
-
-//   create(req, res, next) {
-//     const { name, email, password, role, restaurant } = req.body;
-
-//     users.create({
-//       name, 
-//       email, 
-//       password, 
-//       role, 
-//       restaurant
-//     })
-//       .then((result) => {
-//         res.status(201).json(result); //return with ID -> 201 (CREATED)
-//       })
-//       .catch(next);
-//   },
-// };
