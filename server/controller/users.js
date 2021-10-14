@@ -7,7 +7,8 @@ module.exports={
   async getUsers (req, res) {
     try{
       const allUsers = await users.findAll({
-        attributes:["id", "name", "email", "role"]
+        attributes:["id", "name", "email", "role", "restaurant"],
+        order:[['id', 'ASC']]
       })
       return res.status(200).json(allUsers);
     }
@@ -30,12 +31,19 @@ module.exports={
       defaults: {name, password, role, restaurant}
     });
     if(created){
-      return res.status(200).json(user);
+      return res.status(200).json({
+        id:user.id,
+        name:user.name,
+        email:user.email,
+        role:user.role,
+        restaurant:user.restaurant
+
+      })
 
     } else {
       return res.status(400).json({
         code: 400,
-        error: "E-mail já cadastrado.",
+        error: "E-mail has already been registered.",
       });
     }
 

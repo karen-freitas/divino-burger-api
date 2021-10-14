@@ -13,11 +13,62 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   users.init({
-    name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    role: DataTypes.STRING,
-    restaurant: DataTypes.STRING
+    name: {
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate: {
+        notNull: {msg: "The name field is required"},
+        notEmpty: {msg: "The name field is required"},
+        len:{
+          args:[3, 30],
+          msg:"The name must be at least 3 characters."
+        } 
+      }
+    },
+      
+    email: {
+        type:DataTypes.STRING,
+        allowNull:false,
+        unique: true,
+        validate: {
+          notNull: {msg: "The email field is required"},
+          notEmpty: {msg: "The email field is required"},
+          isEmail:{msg: "Invalid email address"}
+        }
+    },
+
+    password:{
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate: {
+        notNull: {msg: "The password field is required"},
+        notEmpty: {msg: "The password field is required"},
+        len:{
+          args:[6, 20],
+          msg:"The password must be at least 6 characters."
+        } 
+      }
+    },
+
+
+    role: {
+      type:DataTypes.STRING,
+      allowNull:false,
+      validate: {
+        notNull: {msg: "The role field is required"},
+        notEmpty: {msg: "The role field is required"},
+        isIn: {
+          args:[['hall', 'kitchen']],
+          msg: "Role must be kitchen or hall"
+        }
+      }
+  },
+
+    restaurant: {
+      type:DataTypes.STRING,
+      defaultValue: 'Divino Burger',
+    }
+    
   }, {
       sequelize,
     modelName: 'users',
@@ -25,36 +76,3 @@ module.exports = (sequelize, DataTypes) => {
   return users;
 };
 
-// const {DataTypes} =require("sequelize")
-// const sequelize = require("../sequelize");
-
-// const users = sequelize.define("user",{
-//     name: DataTypes.STRING,
-//     email: DataTypes.STRING,
-//     password: DataTypes.STRING,
-//     role: DataTypes.STRING,
-//     restaurant: DataTypes.STRING
-
-// });
-// const init = async () => {
-//   await users.sync();
-// };
-
-// init();
-
-// module.exports = users;
-// module.exports = (sequelize, Sequelize) => {
-//   const users = sequelize.define( "users", {
-//     name: {
-//       type: Sequelize.STRING
-//     },
-//     email: {
-//       type: Sequelize.STRING
-//     },
-//     password: {
-//       type: Sequelize.STRING
-//     }
-//   });
-
-//   return users;
-// };
