@@ -54,10 +54,34 @@ module.exports = {
     }
   },
 
+  async getUserById(req, res) {
+    try {
+      const foundUser = await users.findOne({
+        where: { id: req.params.userId },
+        attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+      });
+
+      if (!foundUser) {
+        return res.status(400).json({
+          code: 400,
+          message: 'User not found.',
+        });
+      }
+      return res.status(200).json(foundUser)
+
+
+    } catch (error) {
+      return res.status(400).json({
+        code: 400,
+        error: error.message,
+      });
+    }
+  },
+
   async updateUser(req, res) {
 
     const { name, password, role } = req.body;
-    const foundUser = await users.findByPk(req.params.userId);
+    const foundUser = await users.findOne(req.params.userId);
 
     if (!foundUser) {
       return res.status(400).json({
@@ -67,7 +91,7 @@ module.exports = {
     }
 
     try {
-       await users.update(
+      await users.update(
         { name, password, role },
         { where: { id: req.params.userId } },
       );
