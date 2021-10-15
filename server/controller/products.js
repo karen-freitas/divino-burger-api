@@ -42,17 +42,14 @@ module.exports = {
         where: { name: name, flavor:flavor, complement:complement },
         defaults: { price, image, type, subtype  }
       });
+
       if (created) {
-        return res.status(200).json({
-          name:product.name, 
-          price:product.price, 
-          flavor:product.flavor, 
-          complement:product.complement, 
-          image:product.image, 
-          type:product.type, 
-          subtype:product.subtype
-          
-        })
+        const foundProduct = await products.findOne({
+          where: { id: product.id},
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        });
+
+        return res.status(200).json(foundProduct)
 
       } else {
         return res.status(400).json({
@@ -69,90 +66,90 @@ module.exports = {
     }
   },
 
-  // async getUserById(req, res) {
-  //   try {
-  //     const foundUser = await users.findOne({
-  //       where: { id: req.params.userId },
-  //       attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
-  //     });
+  async getProductById(req, res) {
+    try {
+      const foundProduct = await products.findOne({
+        where: { id: req.params.productId },
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
+      });
 
-  //     if (!foundUser) {
-  //       return res.status(400).json({
-  //         code: 400,
-  //         message: 'User not found.',
-  //       });
-  //     }
-  //     return res.status(200).json(foundUser)
+      if (!foundProduct) {
+        return res.status(400).json({
+          code: 400,
+          message: 'Product not found.',
+        });
+      }
+      return res.status(200).json(foundProduct)
 
 
-  //   } catch (error) {
-  //     return res.status(400).json({
-  //       code: 400,
-  //       error: error.message,
-  //     });
-  //   }
-  // },
+    } catch (error) {
+      return res.status(400).json({
+        code: 400,
+        error: error.message,
+      });
+    }
+  },
 
-  // async updateUser(req, res) {
+  async updateProduct(req, res) {
 
-  //   const { name, password, role } = req.body;
-  //   const foundUser = await users.findByPk(req.params.userId);
+    const foundProduct = await products.findByPk(req.params.productId);
+    
+    if (!foundProduct) {
+      return res.status(400).json({
+        code: 400,
+        message: 'Product not found.',
+      });
+    }
+    
+    try {
+      const { name, price, flavor, complement, image, type, subtype } = req.body;
+      await products.update(
+        { name, price, flavor, complement, image, type, subtype},
+        { where: { id: req.params.productId }},
+      );
 
-  //   if (!foundUser) {
-  //     return res.status(400).json({
-  //       code: 400,
-  //       message: 'User not found.',
-  //     });
-  //   }
+      const updatedProduct= await products.findOne({
+        where: { id: req.params.productId },
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
+      });
 
-  //   try {
-  //     await users.update(
-  //       { name, password, role },
-  //       { where: { id: req.params.userId } },
-  //     );
+      return res.status(200).json(updatedProduct);
 
-  //     const updatedUser = await users.findOne({
-  //       where: { id: req.params.userId },
-  //       attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
-  //     });
+    } catch (error) {
+      return res.status(400).json({
+        code: 400,
+        error: error.message,
+      });
+    }
+  },
 
-  //     return res.status(200).json(updatedUser);
+  async deleteProduct(req,res){
+    const foundProduct = await products.findOne({
+      where: {id:req.params.productId},
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+    });
 
-  //   } catch (error) {
-  //     return res.status(400).json({
-  //       code: 400,
-  //       error: error.message,
-  //     });
-  //   }
-  // },
+    if (!foundProduct) {
+      return res.status(400).json({
+        code: 400,
+        message: 'Product not found.',
+      });
+    }
 
-  // async deleteUser(req,res){
-  //   const foundUser = await users.findOne({
-  //     where: {id:req.params.userId},
-  //     attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
-  //   });
+    try{
+      await products.destroy({
+        where: {
+          id: req.params.productId,
+        }
+      });
+      return res.status(200).json(`Product with id ${foundProduct.id} and name ${foundProduct.name} was successfully deleted.`);
 
-  //   if (!foundUser) {
-  //     return res.status(400).json({
-  //       code: 400,
-  //       message: 'User not found.',
-  //     });
-  //   }
+    } catch (error) {
+      return res.status(400).json({
+        code: 400,
+        error: error.message,
+      });
+    }
 
-  //   try{
-  //     await users.destroy({
-  //       where: {
-  //         id: req.params.userId,
-  //       }
-  //     });
-  //     return res.status(200).json(`User with id ${foundUser.id} and e-mail ${foundUser.email} was successfully deleted.`);
-
-  //   } catch (error) {
-  //     return res.status(400).json({
-  //       code: 400,
-  //       error: error.message,
-  //     });
-  //   }
-
-  // }
+  }
 }
