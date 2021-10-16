@@ -1,10 +1,12 @@
-// const { Router } = require('express');
-// const { getExample, getOtherExample } = require('../controller/orders');
+const { Router } = require('express');
+const { addOrder } = require('../controller/orders');
 
-// const router = Router();
+const router = Router();
 
-// // aqui vai as requisições
-// router.get('/', getExample);
-// router.post('/', getOtherExample);
+// router.get('/', getOrders);
+router.post('/', addOrder);
+// router.put('/:productId', updateOrder);
+// router.get('/:productId', getOrderById);
+// router.delete('/:productId', deleteOrder)
 
-// module.exports = router;
+module.exports = router;

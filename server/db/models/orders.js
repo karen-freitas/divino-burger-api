@@ -1,27 +1,64 @@
-'use strict';
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class orders extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      orders.belongsToMany(models.products, {
+        through: 'orderProduct',
+        as: 'products',
+        foreignKey: 'orderId'
+      });
+
+      orders.belongsTo(models.users, {
+        foreignKey: 'user_id',
+        as: 'user'
+      });
     }
-  };
+  }
+
   orders.init({
-    client_name: DataTypes.STRING,
-    user_id: DataTypes.INTEGER,
-    table: DataTypes.INTEGER,
-    status: DataTypes.STRING,
-    processedAt: DataTypes.DATE
+    client_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: { msg: 'The client name field is required' },
+        notEmpty: { msg: 'The client name field is required' }
+      }
+    },
+
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: { msg: 'The user id field is required' },
+        notEmpty: { msg: 'The user id field is required' }
+      }
+    },
+
+    table: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: { msg: 'The table field is required' },
+        notEmpty: { msg: 'The table field is required' }
+      }
+    },
+
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: 'pending'
+    },
+
+    processedAt: {
+      type: DataTypes.DATE,
+      defaultValue: Date.now()
+    }
+
   }, {
     sequelize,
-    modelName: 'orders',
+    modelName: 'orders'
   });
   return orders;
 };

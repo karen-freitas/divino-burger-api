@@ -1,39 +1,40 @@
-if (process.env.NODE_ENV !== 'production'){ require('dotenv').config(); }
+/* eslint-disable global-require */
+if (process.env.NODE_ENV !== 'production') { require('dotenv').config(); }
 
 module.exports = {
 
-   "development": {
-    "username": process.env.DATABASE_USER,
-    "password": process.env.DATABASE_PASSWORD,
-    "database": process.env.DATABASE_DATABASE,
-    "host": process.env.DATABASE_HOST,
-    "dialect": "postgres",
-    "dialectOptions": {
-      "ssl": {
-        "require": true,
-        "rejectUnauthorized": false
+  development: {
+    username: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_DATABASE,
+    host: process.env.DATABASE_HOST,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
       }
     }
   },
 
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+  test: {
+    username: 'root',
+    password: null,
+    database: 'database_test',
+    host: '127.0.0.1',
+    dialect: 'postgres'
   },
-  "production": {
-    "username": process.env.DATABASE_USER,
-    "password": process.env.DATABASE_PASSWORD,
-    "database": process.env.DATABASE_DATABASE,
-    "host": process.env.DATABASE_HOST,
-    "dialect": "postgres",
-    "dialectOptions": {
-      "ssl": {
-        "require": true,
-        "rejectUnauthorized": false
+  production: {
+    username: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_DATABASE,
+    host: process.env.DATABASE_HOST,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
       }
     }
   }
-}
+};

@@ -7,7 +7,9 @@
     "ecmaVersion": 2018
   },
   "rules": {
-    "linebreak-style": ["error", "(process.platform === win32 ? windows : unix)"],
+    "comma-dangle": ["error", "never"],
+    // "linebreak-style": ["error", "(process.platform === win32 ? windows : unix)"],
+    "linebreak-style":0,
     "no-underscore-dangle": "off",
     "consistent-return": "off",
     "no-shadow": "off",
