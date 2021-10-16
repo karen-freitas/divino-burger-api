@@ -1,62 +1,51 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-// const database = require('../db/models');
+const database = require('../db/models');
 
-// const { orders, orderProduct, products } = database;
+const { orders, orderProduct, products } = database;
 
 module.exports = {
 
-  // async getProducts(req, res) {
-  //   try {
-  //     const allProducts = await products.findAll({
-  //       attributes: {exclude:['createdAt','updatedAt']},
-  //       order: [['id', 'ASC']]
-  //     })
-  //     return res.status(200).json(allProducts);
-  //   }
-  //   catch (error) {
-  //     return res.status(400).json({
-  //       code: 400,
-  //       error: error.message,
-  //     });
-  //   }
-
-  // },
+  async getOrders(req, res) {
+    try {
+      const allOrders = await orders.findAll({
+        // attributes: { exclude: ['createdAt', 'updatedAt'] },
+        include: [{
+          model: products, as: 'products', attributes: ['id', 'name', 'flavor', 'complement'], through: { attributes: ['qtd'], as: 'details' }
+        }],
+        order: [['id', 'ASC']]
+      });
+      return res.status(200).json(allOrders);
+    } catch (error) {
+      return res.status(400).json({
+        code: 400,
+        error: error.message
+      });
+    }
+  },
 
   async addOrder(req, res) {
     try {
-      // const createdOrder = await orders.create(req.body);
-      const productsList = req.body.products;
-      const array = Array.from(productsList)
+      const createdOrder = await orders.create(req.body);
+      const allProducts = req.body.products;
+      const productsList = JSON.parse(allProducts);
 
-      // productsList = productsList.map((item) => ({
-      // orderId: createdOrder.id,
-      //   productId: item.id,
-      //   qtd: item.qtd
-      // }));
+      productsList.forEach(async (item) => {
+        const dataItem = {
+          orderId: createdOrder.id,
+          productId: item.id,
+          qtd: item.qtd
+        };
+        console.log(dataItem);
+        await orderProduct.create(dataItem);
+      });
 
-      // await orderProduct.bulkCreate(productsList);
+      const order = await orders.findByPk(createdOrder.id, {
+        include: { model: products, as: 'products', attributes: ['id', 'name', 'flavor', 'complement'] }
 
-      // console.log(typeof array);
-      // console.log(array)
-      // if 
-      // console.log(productsList.split('}'));
+      });
 
-      // productsList = productsList.forEach(async(item) => {
-      //     const dataItem = {
-      //       orderId: createdOrder.id,
-      //       productId: item.id,
-      //       qtd: item.quantity
-      //     };
-      //     await orderProduct.create(dataItem);
-      //   });
-      // });
-
-      // const order = await orders.findByPk(createdOrder.id, {
-      //   include: [{ model: products, as: 'products' }]
-      // });
-
-      // return res.json(order);
+      return res.json(order);
 
     // orderProducts = orderProducts.map(product => {
     //   return {
