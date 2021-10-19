@@ -1,3 +1,5 @@
+/* eslint-disable space-before-blocks */
+/* eslint-disable global-require */
 if (process.env.NODE_ENV !== 'production'){ require('dotenv').config(); }
 
 const express = require('express');
@@ -18,5 +20,6 @@ app.get('*', (req, res) => {
 });
 
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`Example app listening at http://localhost:${port}`);
 });

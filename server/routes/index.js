@@ -8,9 +8,6 @@ const router = Router();
 
 router.use('/users', UsersRouter);
 router.use('/products', ProductsRouter);
-// router.use('/orders', OrdersRouter);
-
-
+router.use('/orders', OrdersRouter);
 
 module.exports = router;
-
