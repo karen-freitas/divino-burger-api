@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-console */
 /* eslint-disable max-len */
 const database = require('../db/models');
@@ -26,9 +27,41 @@ module.exports = {
 
   async addOrder(req, res) {
     try {
-      const createdOrder = await orders.create(req.body);
       const allProducts = req.body.products;
       const productsList = JSON.parse(allProducts);
+      if (productsList.length === 0) {
+        throw new Error('There are no products in the order ');
+      }
+
+      let itemsArray = productsList.map(async (item) => {
+        if (item.id === undefined) {
+          throw new Error('Product id is required.');
+        }
+        const foundProduct = await products.findByPk(item.id);
+
+        if (!foundProduct) {
+          throw new Error(`Product with id ${item.id} was not found.`);
+        }
+
+        const {
+          id, name, flavor, complement
+        } = foundProduct;
+        const { qtd } = item;
+
+        if (qtd === undefined) {
+          throw new Error('Product quantity is required.');
+        }
+
+        const itemDetails = {
+          id, name, flavor, complement, qtd
+        };
+
+        return itemDetails;
+      });
+
+      itemsArray = await Promise.all(itemsArray);
+
+      const createdOrder = await orders.create(req.body);
 
       productsList.forEach(async (item) => {
         const dataItem = {
@@ -36,28 +69,119 @@ module.exports = {
           productId: item.id,
           qtd: item.qtd
         };
-        console.log(dataItem);
         await orderProduct.create(dataItem);
       });
 
-      const order = await orders.findByPk(createdOrder.id, {
-        include: { model: products, as: 'products', attributes: ['id', 'name', 'flavor', 'complement'] }
-
+      const order = await orders.findOne({
+        where: { id: createdOrder.id }
       });
 
-      return res.json(order);
+      const {
+        id, user_id, client_name, table, status, createdAt, updatedAt, processedAt
+      } = order;
+      const orderData = {
+        id,
+        user_id,
+        client_name,
+        table,
+        status,
+        createdAt,
+        updatedAt,
+        processedAt,
+        products: itemsArray
 
-    // orderProducts = orderProducts.map(product => {
-    //   return {
-    //     'orderId': createdOrder.id,
-    //     'productId': product.id,
-    //     'qtd': product.qtd
-    //   }
-    // })
-    // await orderProduct.createOrderProducts.bulkCreate(orderProducts);
-    // res.status(201).json({
-    //   message: "pedido criado com sucesso"
-    // });
+      };
+
+      return res.json(orderData);
+    } catch (error) {
+      return res.status(400).json({
+        code: 400,
+        error: error.message
+      });
+    }
+  },
+
+  async getOrderById(req, res) {
+    try {
+      const foundOrder = await orders.findByPk(req.params.orderId,
+        {
+          include: [{
+            model: products, as: 'products', attributes: ['id', 'name', 'flavor', 'complement'], through: { attributes: ['qtd'], as: 'details' }
+          }]
+        });
+
+      if (!foundOrder) {
+        return res.status(400).json({
+          code: 400,
+          message: 'Order not found.'
+        });
+      }
+      return res.status(200).json(foundOrder);
+    } catch (error) {
+      return res.status(400).json({
+        code: 400,
+        error: error.message
+      });
+    }
+  },
+
+  async updateOrder(req, res) {
+    const foundOrder = await orders.findByPk(req.params.orderId);
+
+    if (!foundOrder) {
+      return res.status(400).json({
+        code: 400,
+        message: 'Order not found.'
+      });
+    }
+
+    try {
+      const { status } = req.body;
+      await orders.update(
+        { status },
+        { where: { id: req.params.orderId } }
+      );
+
+      const updatedOrder = await orders.findByPk(req.params.orderId,
+        {
+          include: [{
+            model: products, as: 'products', attributes: ['id', 'name', 'flavor', 'complement'], through: { attributes: ['qtd'], as: 'details' }
+          }]
+        });
+
+      return res.status(200).json(updatedOrder);
+    } catch (error) {
+      return res.status(400).json({
+        code: 400,
+        error: error.message
+      });
+    }
+  },
+
+  async deleteOrder(req, res) {
+    const foundOrder = await orders.findByPk(req.params.orderId);
+
+    if (!foundOrder) {
+      return res.status(400).json({
+        code: 400,
+        message: 'Order not found.'
+      });
+    }
+
+    try {
+      await orderProduct.destroy({
+        where: {
+          orderId: req.params.orderId
+        }
+      });
+
+      await orders.destroy({
+        where: {
+          id: req.params.orderId
+        }
+      });
+
+      return res.status(200).json(`Order with id ${foundOrder.id} was successfully deleted.`);
     } catch (error) {
       return res.status(400).json({
         code: 400,
@@ -65,145 +189,4 @@ module.exports = {
       });
     }
   }
-
-  // try{
-  //   products.map(async (item) => {
-  //     const foundProduct = await products.findByPk(item.id);
-
-  //     if (!foundProduct) {
-  //       throw new Error(`Product with id ${item.id} was not found.`);
-  //     }
-
-  //     const { qtd } = item;
-  //     const { id, name, flavor, complement} = foundProduct;
-  //     const orderItem = { id, name, flavor, complement, qtd };
-
-  //     return orderItem;
-  //   })
-
-  //   // productsList = await Promise.all(productsList);
-
-  //   let newOrder = await orders.create({ user_id, client_name, table });
-  //   // newOrder = newOrder.toJSON();
-  //   // const { id, status, createdAt, updatedAt, processedAt } = newOrder;
-
-  //   const orderItems = products.map((item) => ({
-  //     order_id: newOrder.id,
-  //     product_id: item.id,
-  //     qtd: item.qtd,
-  //   }));
-
-  //   await orderProduct.bulkCreate(orderItems);
-
-  //   // const completeNewOrder = {
-  //   //   id,
-  //   //   user_id,
-  //   //   client_name,
-  //   //   table,
-  //   //   status,
-  //   //   createdAt,
-  //   //   updatedAt,
-  //   //   processedAt,
-  //   //   products: productsList,
-  //   // };
-
-  //   const order = await orders.findByPk(newOrder.id, {
-  //     include: { association: 'products' }
-  //   });
-
-  //   return res.status(201).json(order);
-
-  // } catch (error) {
-  //   return res.status(400).json({
-  //     code: 400,
-  //     error: error.message,
-  //   });
-  // }
-  // }
-
-  //   async getProductById(req, res) {
-  //     try {
-  //       const foundProduct = await products.findOne({
-  //         where: { id: req.params.productId },
-  //         attributes: { exclude: ['createdAt', 'updatedAt'] },
-  //       });
-
-  //       if (!foundProduct) {
-  //         return res.status(400).json({
-  //           code: 400,
-  //           message: 'Product not found.',
-  //         });
-  //       }
-  //       return res.status(200).json(foundProduct)
-
-  //     } catch (error) {
-  //       return res.status(400).json({
-  //         code: 400,
-  //         error: error.message,
-  //       });
-  //     }
-  //   },
-
-  //   async updateProduct(req, res) {
-
-  //     const foundProduct = await products.findByPk(req.params.productId);
-
-  //     if (!foundProduct) {
-  //       return res.status(400).json({
-  //         code: 400,
-  //         message: 'Product not found.',
-  //       });
-  //     }
-
-  //     try {
-  //       const { name, price, flavor, complement, image, type, subtype } = req.body;
-  //       await products.update(
-  //         { name, price, flavor, complement, image, type, subtype},
-  //         { where: { id: req.params.productId }},
-  //       );
-
-  //       const updatedProduct= await products.findOne({
-  //         where: { id: req.params.productId },
-  //         attributes: { exclude: ['createdAt', 'updatedAt'] },
-  //       });
-
-  //       return res.status(200).json(updatedProduct);
-
-  //     } catch (error) {
-  //       return res.status(400).json({
-  //         code: 400,
-  //         error: error.message,
-  //       });
-  //     }
-  //   },
-
-  //   async deleteProduct(req,res){
-  //     const foundProduct = await products.findOne({
-  //       where: {id:req.params.productId},
-  //       attributes: { exclude: ['createdAt', 'updatedAt'] },
-  //     });
-
-  //     if (!foundProduct) {
-  //       return res.status(400).json({
-  //         code: 400,
-  //         message: 'Product not found.',
-  //       });
-  //     }
-
-  //     try{
-  //       await products.destroy({
-  //         where: {
-  //           id: req.params.productId,
-  //         }
-  //       });
-  //       return res.status(200).json(`Product with id ${foundProduct.id} and name ${foundProduct.name} was successfully deleted.`);
-
-  //     } catch (error) {
-  //       return res.status(400).json({
-  //         code: 400,
-  //         error: error.message,
-  //       });
-  //     }
-
-//   }
 };
