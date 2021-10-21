@@ -38,11 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: { msg: 'The password field is required' },
-        notEmpty: { msg: 'The password field is required' },
-        len: {
-          args: [6, 20],
-          msg: 'The password must be at least 6 characters.'
-        }
+        notEmpty: { msg: 'The password field is required' }
       }
     },
 
