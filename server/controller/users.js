@@ -1,4 +1,5 @@
 // aqui vai o código que acessa o banco de dados
+const bcrypt = require('bcrypt');
 const database = require('../db/models');
 
 const { users } = database;
@@ -22,8 +23,10 @@ module.exports = {
 
   async addUser(req, res) {
     const {
-      name, email, password, role, restaurant
+      name, email, role, restaurant
     } = req.body;
+
+    const password = bcrypt.hashSync(req.body.password, 10);
 
     try {
       const [user, created] = await users.findOrCreate({
@@ -77,7 +80,8 @@ module.exports = {
   },
 
   async updateUser(req, res) {
-    const { name, password, role } = req.body;
+    const { name, role } = req.body;
+    const password = bcrypt.hashSync(req.body.password, 10);
     const foundUser = await users.findByPk(req.params.userId);
 
     if (!foundUser) {

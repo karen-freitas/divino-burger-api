@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
 
     processedAt: {
       type: DataTypes.DATE,
-      defaultValue: Date.now()
+      defaultValue: new Date()
     }
 
   }, {

@@ -6,7 +6,6 @@ const database = require('../db/models');
 const { orders, orderProduct, products } = database;
 
 module.exports = {
-
   async getOrders(req, res) {
     try {
       const allOrders = await orders.findAll({
