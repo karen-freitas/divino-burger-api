@@ -9,35 +9,37 @@ const { users } = database;
 const permit = new Bearer();
 
 module.exports = {
-  login(req, res) {
-    const { email, password } = req.body;
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
 
-    users.findOne({
-      where: {
-        email
-      }
-    }).then((user) => {
-      // username does not exists
-      if (!user) return res.status(401).json({ error: 'Email not found' });
+      const foundUser = await users.findOne({
+        where: {
+          email
+        }
+      });
 
-      // password check
-      if (!bcrypt.compareSync(password, user.password)) {
+      if (!foundUser) return res.status(401).json({ error: 'Email not found' });
+
+      if (!bcrypt.compareSync(password, foundUser.password)) {
         return res.status(401).json({ error: 'Invalid password' });
       }
 
-      // generate & sign token
-      const jwtPayload = { id: user.id }; // public payload!
-      const token = jwt.sign(jwtPayload, process.env.JWT_SECRET); // user: user
+      const jwtPayload = { id: foundUser.id };
+      const token = jwt.sign(jwtPayload, process.env.JWT_SECRET);
 
       return res.status(200).json({ token });
-    });
+    } catch (error) {
+      return res.status(400).json({
+        code: 400,
+        error: error.message
+      });
+    }
   },
 
   auth(req, res, next) {
-    // Try to find the bearer token in the request.
     const token = req.headers.authorization;
 
-    // No token found, so ask for authentication.
     if (!token) {
       permit.fail(res);
       return res.status(401).json({ error: 'Authentication required!' });
@@ -46,10 +48,8 @@ module.exports = {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         permit.fail(res);
-        return res.status(401).json({ error: 'failed to authenticate token!' });
+        return res.status(401).json({ error: 'Failed to authenticate token!' });
       }
-
-      // save username for next middleware
       req.id = decoded.id;
       next();
     });
