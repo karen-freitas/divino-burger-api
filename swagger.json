@@ -1,0 +1,360 @@
+{
+  "swagger": "2.0.0",
+  "info": {
+    "description": "Api developed for internal management of hamburger restaurants.",
+    "version": "1.0.0",
+    "title": "Divino Burger API",
+    "contact": {
+      "url": "https://github.com/karen-freitas"
+    }
+  },
+  "host": "divino-burger-api.herokuapp.com/",
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Create a token"
+    },
+    {
+      "name": "users",
+      "description": "Operations about user"
+    },
+    {
+      "name": "products",
+      "description": "Operations about products"
+    },
+    {
+      "name": "orders",
+      "description": "Access to all orders"
+    }
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "",
+        "description": "Generates a token from the e-mail address and password of a registered user",
+        "operationId": "auth",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "type": "json",
+            "description": "User data",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/auth"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/components/schemas/authRes"
+            }
+          },
+          "400": {
+            "description": "Invalid email and/or password",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "List all users",
+        "description": "List all users of the restaurant",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/users"
+              }
+            }
+          },
+          "401": {
+            "description": "User not authenticated",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Create user",
+        "description": "Create a new user",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "type": "json",
+            "description": "User data",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/users"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Sucessful operation",
+            "schema": {
+              "$ref": "#/components/schemas/users"
+            }
+          },
+          "400": {
+            "description": "Missing required data and/ or Email already in use",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get user by ID",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "type": "number",
+            "description": "ID of user to return",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization Token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/components/schemas/users"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update user",
+        "description": "Update user role or name",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "type": "number",
+            "description": "ID of user to be updated",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization Token",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "type": "json",
+            "description": "User data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessful operation",
+            "schema": {
+              "$ref": "#/components/schemas/users"
+            }
+           
+            
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete user",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "type": "number",
+            "description": "ID of user to be deleted",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessful operation",
+            "schema": {
+              "type":"string",
+              "example":"User with id {id} and e-mail {email} was successfully deleted."
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "auth": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "authRes": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "restaurant": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "users": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "restaurant": {
+            "type": "string"
+          }
+        }
+      },
+      "error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
