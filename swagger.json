@@ -58,7 +58,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "$ref": "#/components/schemas/authRes"
+              "$ref": "#/components/schemas/authResponse"
             }
           },
           "400": {
@@ -95,7 +95,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/components/schemas/users"
+                "$ref": "#/components/schemas/usersResponse"
               }
             }
           },
@@ -132,7 +132,7 @@
           "201": {
             "description": "Successful operation",
             "schema": {
-              "$ref": "#/components/schemas/users"
+              "$ref": "#/components/schemas/usersResponse"
             }
           },
           "400": {
@@ -174,7 +174,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "$ref": "#/components/schemas/users"
+              "$ref": "#/components/schemas/usersResponse"
             }
           },
           "400": {
@@ -232,7 +232,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "$ref": "#/components/schemas/users"
+              "$ref": "#/components/schemas/usersResponse"
             }
           },
           "400": {
@@ -310,7 +310,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/components/schemas/products"
+                "$ref": "#/components/schemas/productsResponse"
               }
             }
           },
@@ -354,7 +354,7 @@
           "201": {
             "description": "Successful operation",
             "schema": {
-              "$ref": "#/components/schemas/products"
+              "$ref": "#/components/schemas/productsResponse"
             }
           },
           "400": {
@@ -396,7 +396,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "$ref": "#/components/schemas/products"
+              "$ref": "#/components/schemas/productsResponse"
             }
           },
           "400": {
@@ -446,7 +446,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "$ref": "#/components/schemas/products"
+              "$ref": "#/components/schemas/productsResponse"
             }
           },
           "400": {
@@ -733,7 +733,7 @@
             }
           }
         },
-        "authRes": {
+        "authResponse": {
           "type": "object",
           "properties": {
             "id": {
@@ -759,6 +759,23 @@
         "users": {
           "type": "object",
           "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "restaurant": {
+              "type": "string"
+            }
+          }
+        },
+        "usersResponse": {
+          "type": "object",
+          "properties": {
             "id": {
               "type": "string"
             },
@@ -777,6 +794,33 @@
           }
         },
         "products": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "flavor": {
+              "type": "string"
+            },
+            "complement": {
+              "type": "string"
+            },
+            "price": {
+              "type": "integer",
+              "format": "float"
+            },
+            "image": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "subtype": {
+              "type": "string"
+            }
+          }
+        },
+        "productsResponse": {
           "type": "object",
           "properties": {
             "id": {
