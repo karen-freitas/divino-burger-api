@@ -91,7 +91,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucessful operation",
+            "description": "Successful operation",
             "schema": {
               "type": "array",
               "items": {
@@ -130,7 +130,7 @@
         ],
         "responses": {
           "201": {
-            "description": "Sucessful operation",
+            "description": "Successful operation",
             "schema": {
               "$ref": "#/components/schemas/users"
             }
@@ -230,12 +230,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucessful operation",
+            "description": "Successful operation",
             "schema": {
               "$ref": "#/components/schemas/users"
             }
-           
-            
           },
           "400": {
             "description": "Bad request",
@@ -272,10 +270,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Sucessful operation",
+            "description": "Successful operation",
             "schema": {
-              "type":"string",
-              "example":"User with id {id} and e-mail {email} was successfully deleted."
+              "type": "string",
+              "example": "User with id {id} and e-mail {email} was successfully deleted."
             }
           },
           "400": {
@@ -286,75 +284,646 @@
           }
         }
       }
-    }
-  },
-  "components": {
-    "schemas": {
-      "auth": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
+    },
+    "/products": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Get all products",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/products"
+              }
+            }
           },
-          "password": {
-            "type": "string"
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
           }
         }
       },
-      "authRes": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
+      "post": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Create product",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
           },
-          "name": {
-            "type": "string"
+          {
+            "in": "body",
+            "name": "body",
+            "type": "json",
+            "description": "Product data",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/products"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/components/schemas/products"
+            }
           },
-          "email": {
-            "type": "string"
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      }
+    },
+    "/products/{productId}": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Find product by id",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "productId",
+            "type": "number",
+            "description": "ID of product to return",
+            "required": true
           },
-          "role": {
-            "type": "string"
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/components/schemas/products"
+            }
           },
-          "restaurant": {
-            "type": "string"
-          },
-          "token": {
-            "type": "string"
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
           }
         }
       },
-      "users": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
+      "put": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Update product",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "productId",
+            "type": "number",
+            "description": " ID of product to be updated",
+            "required": true
           },
-          "name": {
-            "type": "string"
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
           },
-          "email": {
-            "type": "string"
+          {
+            "in": "body",
+            "name": "body",
+            "type": "json",
+            "description": "Product data",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/products"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/components/schemas/products"
+            }
           },
-          "role": {
-            "type": "string"
-          },
-          "restaurant": {
-            "type": "string"
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
           }
         }
       },
-      "error": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string"
+      "delete": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Delete product",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "productId",
+            "type": "number",
+            "description": "ID of product to be deleted",
+            "required": true
           },
-          "message": {
-            "type": "string"
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "string",
+              "example": "Product with id {id} and name {name} was successfully deleted."
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      }
+    },
+    "/orders": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "List all orders",
+        "description": "Get all orders of the restaurant",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ordersResponse"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Create order",
+        "description": "Create a new order",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "type": "json",
+            "description": "Order data",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/orders"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/components/schemas/ordersResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/{orderId}": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Get order by ID",
+        "description": "",
+        "operationId": "listOrdersId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orderId",
+            "type": "number",
+            "description": "ID of product to be returned",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/components/schemas/ordersResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Update order status",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orderId",
+            "type": "number",
+            "description": "ID of product to be updated",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "description": "Authorization token",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "type": "json",
+            "description": "New order status",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "schema": {
+                "$ref": "#/components/schemas/ordersResponse"
+              }
+            },
+            "400": {
+              "description": "Bad request",
+              "schema": {
+                "$ref": "#/components/schemas/error"
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "orders"
+          ],
+          "summary": "Delete order",
+          "description": "",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "orderId",
+              "type": "number",
+              "description": "ID of order to be deleted",
+              "required": true
+            },
+            {
+              "in": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authorization token",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "schema": {
+                "type": "string",
+                "example": "Order with id {id} was successfully deleted."
+              }
+            },
+            "400": {
+              "description": "Bad request",
+              "schema": {
+                "$ref": "#/components/schemas/error"
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "auth": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
+        },
+        "authRes": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "restaurant": {
+              "type": "string"
+            },
+            "token": {
+              "type": "string"
+            }
+          }
+        },
+        "users": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "restaurant": {
+              "type": "string"
+            }
+          }
+        },
+        "products": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "name": {
+              "type": "string"
+            },
+            "flavor": {
+              "type": "string"
+            },
+            "complement": {
+              "type": "string"
+            },
+            "price": {
+              "type": "integer",
+              "format": "float"
+            },
+            "image": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "subtype": {
+              "type": "string"
+            }
+          }
+        },
+        "orders": {
+          "type": "object",
+          "properties": {
+            "client_name": {
+              "type": "string"
+            },
+            "table": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "user_id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "products": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/orderItem"
+              }
+            }
+          }
+        },
+        "ordersResponse": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "user_id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "client": {
+              "type": "string"
+            },
+            "table": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string"
+            },
+            "comments": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time-zone"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time-zone"
+            },
+            "products": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ordersProduct"
+              }
+            }
+          }
+        },
+        "ordersProduct": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "name": {
+              "type": "string"
+            },
+            "flavor": {
+              "type": "string"
+            },
+            "complement": {
+              "type": "string"
+            },
+            "details": {
+              "type": "object",
+              "$ref": "#/components/schemas/itemDetails"
+            }
+          }
+        },
+        "itemDetails": {
+          "type": "object",
+          "properties": {
+            "qtd": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        },
+        "orderItem": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "qtd": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
           }
         }
       }
     }
   }
-}
