@@ -14,8 +14,8 @@ module.exports = {
       });
       return res.status(200).json(allUsers);
     } catch (error) {
-      return res.status(400).json({
-        code: 400,
+      return res.status(401).json({
+        code: 401,
         error: error.message
       });
     }
@@ -81,7 +81,6 @@ module.exports = {
 
   async updateUser(req, res) {
     const { name, role } = req.body;
-    const password = bcrypt.hashSync(req.body.password, 10);
     const foundUser = await users.findByPk(req.params.userId);
 
     if (!foundUser) {
@@ -93,7 +92,7 @@ module.exports = {
 
     try {
       await users.update(
-        { name, password, role },
+        { name, role },
         { where: { id: req.params.userId } }
       );
 

@@ -19,16 +19,20 @@ module.exports = {
         }
       });
 
-      if (!foundUser) return res.status(401).json({ error: 'Email not found' });
+      if (!foundUser) return res.status(400).json({ error: 'Email not found' });
 
       if (!bcrypt.compareSync(password, foundUser.password)) {
-        return res.status(401).json({ error: 'Invalid password' });
+        return res.status(400).json({ error: 'Invalid password' });
       }
 
-      const jwtPayload = { id: foundUser.id };
+      const { id, name, role, restaurant } = foundUser;
+
+      const jwtPayload = { id };
       const token = jwt.sign(jwtPayload, process.env.JWT_SECRET);
 
-      return res.status(200).json({ token });
+      return res.status(200).json({
+        id, name, email, role, restaurant, token
+      });
     } catch (error) {
       return res.status(400).json({
         code: 400,
