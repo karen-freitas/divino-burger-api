@@ -1,6 +1,6 @@
 # Divino Burger - API com Node.js
 
-Uma API Rest para gerenciamento de pedidos de um restaturante. A documentação poderá ser acessada pelo link [Divino Burger API](https://divino-burger-api.herokuapp.com/api-docs/) com os seguintes dados de usuário:
+Uma API Rest para gerenciamento de pedidos de um restaturante. A documentação poderá ser acessada pelo link [Divino Burger API](https://divino-burger-api.herokuapp.com/api-docs/) e os testes feitos com os seguintes dados de usuário:
 
 📧  *e-mail* - salao@divinoburger.com 
 
